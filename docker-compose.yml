@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # 1. Base de datos con persistencia (IE3)
   db:
@@ -14,19 +12,18 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - db-data:/var/lib/mysql # Aquí está la persistencia con Named Volume
+      - db-data:/var/lib/mysql
     networks:
       - app-network
 
   # 2. Backend de Despachos
   backend-despachos:
-    build: 
-      context: ./back-Despachos_SpringBoot/Springboot-API-REST-DESPACHO
-      dockerfile: Dockerfile
+    # Cambiamos build por la imagen de ECR
+    image: ${REGISTRY}/back-despachos:latest
     container_name: back_despachos
     restart: on-failure
     ports:
-      - "8081:8080" # Expone en el puerto 8081 del host
+      - "8081:8080"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/innovatech_db
       - SPRING_DATASOURCE_USERNAME=dev_user
@@ -38,9 +35,8 @@ services:
 
   # 3. Backend de Ventas
   backend-ventas:
-    build: 
-      context: ./back-Ventas_SpringBoot/Springboot-API-REST
-      dockerfile: Dockerfile
+    # Cambiamos build por la imagen de ECR
+    image: ${REGISTRY}/back-ventas:latest
     container_name: back_ventas
     restart: on-failure
     ports:
@@ -58,9 +54,8 @@ services:
 
   # 4. Frontend
   frontend:
-    build:
-      context: ./front_despacho
-      dockerfile: Dockerfile
+    # Cambiamos build por la imagen de ECR
+    image: ${REGISTRY}/front-innovatech:latest
     container_name: front_innovatech
     restart: always
     ports:
