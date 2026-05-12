@@ -2,7 +2,8 @@ name: CI/CD Innovatech
 
 on:
   push:
-    [cite_start]branches: [ "deploy" ]
+    branches:
+      - deploy
 
 jobs:
   build-and-push:
